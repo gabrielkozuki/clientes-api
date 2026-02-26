@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    container_name: test_api
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/testdb
+      - PORT=3000
+    depends_on:
+      - mongodb
+    volumes: # armazenamento compartilhado/persistente entre host e container
+      - .:/usr/src/app # bind mount
+      - /usr/src/app/node_modules # exceção ao bind mount, pois node_modules é gerado pelo npm ci dentro do container
+
+  mongodb:
+    image: mongo:latest
+    container_name: test_mongodb
+    ports:
+      - "27017:27017"
+    volumes: # persistir os dados do banco mesmo se o container for destruído
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+
+volumes:
+  mongodb_data:
+  mongodb_config:
