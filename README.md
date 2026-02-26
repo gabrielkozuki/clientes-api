@@ -1,2 +1,8 @@
 # clientes-api
-API RESTful developed with Node.js
+
+API RESTful para gerenciamento de Clientes.
+
+- Linguagem: Node.js
+- Banco de dados: MongoDB
+- Containerização com Docker
+- Documentação com Swagger
