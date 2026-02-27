@@ -1,16 +1,17 @@
 import 'dotenv/config';
 import express from 'express';
+
 import { connectToDatabase } from './db.js';
+import clientRoutes from './routes/clientRoutes.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
 app.use(express.json());
 
-app.get('/test', (req, res) => {
-  res.status(200).json({ message: "Hello World!" });
-});
+app.use(clientRoutes);
+app.use(errorHandler);
 
 try {
   await connectToDatabase();
