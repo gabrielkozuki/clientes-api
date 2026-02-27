@@ -19,3 +19,22 @@ export async function createClient(data) {
     throw error;
   }
 }
+
+export async function getAllClients({ page, limit }) {
+  try {
+    const clients = await Client.find()
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .sort({ created_at: -1 })
+
+    const count = await Client.countDocuments();
+
+    return {
+      clients,
+      totalPages: Math.ceil(count / limit),
+      currentPage: parseInt(page)
+    };
+  } catch(error) {
+    throw error;
+  }
+}
