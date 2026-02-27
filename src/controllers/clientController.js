@@ -13,9 +13,20 @@ export async function create(req, res, next) {
 export async function getAll(req, res, next) {
   try {
     const { page = 1, limit = 10 } = req.query;
-
     const clients = await clientRepository.getAllClients({ page, limit })
+
     return res.status(200).json(clients);
+  } catch(error) {
+    next(error);
+  }
+}
+
+export async function getById(req, res, next) {
+  try {
+    const { id } = req.params;
+    const client = await clientRepository.getClient(id);
+
+    return res.status(200).json(client);
   } catch(error) {
     next(error);
   }

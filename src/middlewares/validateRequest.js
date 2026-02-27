@@ -29,3 +29,7 @@ export const validateRequestBody = (schema) => {
 export const validateRequestParams = (schema) => {
   return (req, res, next) => validate(schema, req.query, res, next);
 }
+
+export const validateRequestRouteParams = (schema) => {
+  return (req, res, next) => validate(schema, req.params, res, next);
+}
