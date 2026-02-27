@@ -8,9 +8,9 @@ export const validateRequest = (schema) => {
       next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const formattedErrors = error.errors.map((err) => ({ // retorna um array de objetos com os erros customizados
-          field: err.path.join("."),
-          message: err.message,
+        const formattedErrors = error.issues.map((issue) => ({ // retorna um array de objetos com os erros customizados
+          field: issue.path.join("."),
+          message: issue.message,
         }));
 
         return res.status(400).json({
