@@ -11,7 +11,7 @@ const router = Router();
 router.post('/clients', validateRequestBody(zodClientSchema), clientController.create);
 router.get('/clients', validateRequestParams(paginationSchema), clientController.getAll);
 router.get('/clients/:id', validateRequestRouteParams(documentIdParamsSchema), clientController.getById);
-router.put(`/clients/:id`, validateRequestBody(zodClientSchema), clientController.update);
-router.patch(`/clients/:id`, validateRequestBody(zodPartialClientSchema), clientController.partialUpdate);
+router.put('/clients/:id', validateRequestRouteParams(documentIdParamsSchema), validateRequestBody(zodClientSchema), clientController.update);
+router.patch('/clients/:id', validateRequestRouteParams(documentIdParamsSchema), validateRequestBody(zodPartialClientSchema), clientController.partialUpdate);
 
 export default router;
