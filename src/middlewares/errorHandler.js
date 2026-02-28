@@ -1,7 +1,8 @@
 import { AppError } from '../errors/AppError.js';
+import logger from '../logger.js';
 
 export function errorHandler(err, req, res, next) {
-  console.error(err);
+  logger.error({ err }, 'Erro capturado pelo errorHandler');
 
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({

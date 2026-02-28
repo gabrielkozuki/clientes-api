@@ -11,6 +11,7 @@ API RESTful para gerenciamento de clientes, desenvolvida com Node.js, MongoDB e 
 - **Swagger UI** para documentação interativa
 - **Docker** + **Docker Compose**
 - **Vitest** para testes unitários
+- **Pino** para logs estruturados
 
 ---
 
@@ -40,6 +41,8 @@ Edite o `.env` com as suas configurações:
 ```env
 PORT=3000
 MONGODB_URI=mongodb://mongodb:27017/clientes-api
+NODE_ENV=development # development | production
+LOG_LEVEL=info # trace | debug | info | warn | error | fatal
 ```
 
 > Ao usar Docker Compose, o valor `mongodb` no `MONGODB_URI` corresponde ao nome do serviço definido no `docker-compose.yml`.  
@@ -124,6 +127,7 @@ Todas as rotas podem ser testadas diretamente pela interface do Swagger UI.
 src/
 ├── server.js               # Ponto de entrada
 ├── db.js                   # Conexão com MongoDB
+├── logger.js               # Configuração do Pino
 ├── swagger.yml             # Especificação OpenAPI
 ├── controllers/            # Orquestração de requisição/resposta
 ├── repositories/           # Interação com o banco de dados
@@ -167,3 +171,4 @@ Todas as decisões técnicas foram feitas pelo desenvolvedor, que incluem:
 - Erro `11000` do MongoDB tratado em todas as operações de escrita, garantindo resposta `409` consistente;
 - `mapClient` no repository desacoplando o formato de resposta da estrutura interna do Mongoose;
 - Documentação via `swagger.yml`, sem uso de outras dependências para controle total sobre o contrato da API;
+- Logs estruturados com `pino` e `pino-http`, com nível configurável via `LOG_LEVEL`; em desenvolvimento (`NODE_ENV=development`) o `pino-pretty` formata os logs de forma legível no terminal, em produção o JSON puro é emitido.
