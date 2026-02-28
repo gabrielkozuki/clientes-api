@@ -10,6 +10,7 @@ API RESTful para gerenciamento de clientes, desenvolvida com Node.js, MongoDB e 
 - **Zod** para validação de dados
 - **Swagger UI** para documentação interativa
 - **Docker** + **Docker Compose**
+- **Vitest** para testes unitários
 
 ---
 
@@ -130,7 +131,26 @@ src/
 ├── routes/                 # Definição de rotas e middlewares
 ├── middlewares/            # Validação e tratamento de erros
 ├── validations/            # Schemas Zod
-└── errors/                 # Classes de erro customizadas
+├── errors/                 # Classes de erro customizadas
+└── tests/                  # Testes unitários e mocks
+```
+
+---
+
+## Testes
+
+Os testes unitários cobrem as camadas de **controller** e **repository**, com todas as dependências externas substituídas por mocks — sem necessidade de banco de dados em execução.
+
+Para executar:
+
+```bash
+npm test
+```
+
+Para executar em modo watch (re-executa ao salvar):
+
+```bash
+npm run test:watch
 ```
 
 ---
