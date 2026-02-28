@@ -2,17 +2,20 @@ import Client from '../models/Client.js';
 import { ConflictError } from '../errors/ConflictError.js';
 import { NotFoundError } from '../errors/NotFoundError.js';
 
+const mapClient = (client) => ({
+  id: client._id,
+  name: client.name,
+  email: client.email,
+  document: client.document,
+  createdAt: client.created_at,
+  updatedAt: client.updated_at,
+});
+
 export async function createClient(data) {
   try {
     const client = await Client.create(data);
 
-    return {
-      id: client._id,
-      name: client.name,
-      email: client.email,
-      document: client.document,
-      createdAt: client.created_at,
-    };
+    return mapClient(client);
   } catch (error) {
     if (error.code === 11000) { // MongoDB E11000: chave duplicada
       throw new ConflictError();
@@ -32,9 +35,10 @@ export async function getAllClients({ page, limit }) {
     const count = await Client.countDocuments();
 
     return {
-      clients,
+      clients: clients.map(mapClient),
       totalPages: Math.ceil(count / limit),
-      currentPage: parseInt(page)
+      currentPage: parseInt(page),
+      count
     };
   } catch (error) {
     throw error;
@@ -47,14 +51,7 @@ export async function getClient(id) {
 
     if (!client) throw new NotFoundError();
 
-    return {
-      id: client._id,
-      name: client.name,
-      email: client.email,
-      document: client.document,
-      createdAt: client.created_at,
-      updatedAt: client.updated_at,
-    };
+    return mapClient(client);
   } catch (error) {
     throw error;
   }
@@ -70,14 +67,7 @@ export async function updateClient(id, data) {
 
     if (!client) throw new NotFoundError();
 
-    return {
-      id: client._id,
-      name: client.name,
-      email: client.email,
-      document: client.document,
-      createdAt: client.created_at,
-      updatedAt: client.updated_at,
-    };
+    return mapClient(client);
   } catch (error) {
     if (error.code === 11000) {
       throw new ConflictError();
@@ -96,14 +86,7 @@ export async function partialUpdateClient(id, data) {
 
     if (!client) throw new NotFoundError();
 
-    return {
-      id: client._id,
-      name: client.name,
-      email: client.email,
-      document: client.document,
-      createdAt: client.created_at,
-      updatedAt: client.updated_at,
-    };
+    return mapClient(client);
   } catch (error) {
     if (error.code === 11000) {
       throw new ConflictError();
