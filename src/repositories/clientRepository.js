@@ -79,6 +79,10 @@ export async function updateClient(id, data) {
       updatedAt: client.updated_at,
     };
   } catch (error) {
+    if (error.code === 11000) {
+      throw new ConflictError();
+    }
+
     throw error;
   }
 }
@@ -101,6 +105,10 @@ export async function partialUpdateClient(id, data) {
       updatedAt: client.updated_at,
     };
   } catch (error) {
+    if (error.code === 11000) {
+      throw new ConflictError();
+    }
+    
     throw error;
   }
 }
