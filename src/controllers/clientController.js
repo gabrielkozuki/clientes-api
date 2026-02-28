@@ -53,3 +53,14 @@ export async function partialUpdate(req, res, next) {
     next(error);
   }
 }
+
+export async function remove(req, res, next) {
+  try {
+    const { id } = req.params;
+    await clientRepository.deleteClient(id);
+
+    return res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+}

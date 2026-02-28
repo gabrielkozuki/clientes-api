@@ -104,3 +104,13 @@ export async function partialUpdateClient(id, data) {
     throw error;
   }
 }
+
+export async function deleteClient(id) {
+  try {
+    const client = await Client.findByIdAndDelete(id);
+
+    if (!client) throw new NotFoundError();
+  } catch (error) {
+    throw error;
+  }
+}
