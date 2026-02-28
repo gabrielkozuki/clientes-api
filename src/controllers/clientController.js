@@ -31,3 +31,25 @@ export async function getById(req, res, next) {
     next(error);
   }
 }
+
+export async function update(req, res, next) {
+  try {
+    const { id } = req.params;
+    const client = await clientRepository.updateClient(id, req.body);
+
+    return res.status(200).json(client);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function partialUpdate(req, res, next) {
+  try {
+    const { id } = req.params;
+    const client = await clientRepository.partialUpdateClient(id, req.body);
+
+    return res.status(200).json(client);
+  } catch (error) {
+    next(error);
+  }
+}

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createClientSchema = z.object({
+export const zodClientSchema = z.object({
   name: z.string({
     error: (issue) => issue.input === undefined ? "O nome é obrigatório." : "O nome deve ser uma string.",
   }).min(2, { error: "O nome deve conter pelo menos 2 caracteres." }),
@@ -14,4 +14,4 @@ export const createClientSchema = z.object({
     .regex(/^\d+$/, { error: "O documento deve conter apenas números (sem pontuação)." }),
 });
 
-export const updateClientSchema = createClientSchema.partial(); // schema para atualizar (PUT/PATCH)
+export const zodPartialClientSchema = zodClientSchema.partial(); // schema para PATCH

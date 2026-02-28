@@ -10,7 +10,8 @@ export async function createClient(data) {
       id: client._id,
       name: client.name,
       email: client.email,
-      createdAt: client.createdAt,
+      document: client.document,
+      createdAt: client.created_at,
     };
   } catch (error) {
     if (error.code === 11000) { // MongoDB E11000: chave duplicada
@@ -51,8 +52,53 @@ export async function getClient(id) {
       name: client.name,
       email: client.email,
       document: client.document,
-      createdAt: client.createdAt,
-      updatedAt: client.updatedAt,
+      createdAt: client.created_at,
+      updatedAt: client.updated_at,
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function updateClient(id, data) {
+  try {
+    const client = await Client.findByIdAndUpdate(id, data, { // atualiza apenas os campos fornecidos em data
+      new: true, // retornar dado já atualizado
+      runValidators: true, // faz validações seguindo o model Client
+      overwrite: true
+    });
+
+    if (!client) throw new NotFoundError();
+
+    return {
+      id: client._id,
+      name: client.name,
+      email: client.email,
+      document: client.document,
+      createdAt: client.created_at,
+      updatedAt: client.updated_at,
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function partialUpdateClient(id, data) {
+  try {
+    const client = await Client.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true
+    });
+
+    if (!client) throw new NotFoundError();
+
+    return {
+      id: client._id,
+      name: client.name,
+      email: client.email,
+      document: client.document,
+      createdAt: client.created_at,
+      updatedAt: client.updated_at,
     };
   } catch (error) {
     throw error;
