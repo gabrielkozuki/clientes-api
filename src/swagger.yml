@@ -1,0 +1,249 @@
+openapi: 3.0.4
+info:
+  title: Clientes API
+  version: 1.0.0
+  description: API RESTful para gerenciamento de clientes
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Clients
+    description: Gerenciamento de clientes
+paths:
+  /clients:
+    post:
+      summary: Criar um novo cliente
+      tags: [Clients]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInput'
+      responses:
+        '201':
+          $ref: '#/components/responses/ClientResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+    get:
+      summary: Listar todos os clientes
+      tags: [Clients]
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClientListResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+  /clients/{id}:
+    get:
+      summary: Buscar cliente por id
+      tags: [Clients]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClientResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    put:
+      summary: Atualizar cliente completo
+      tags: [Clients]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClientResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+    patch:
+      summary: Atualizar cliente parcialmente
+      tags: [Clients]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientPartialInput'
+      responses:
+        '200':
+          $ref: '#/components/responses/ClientResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+    delete:
+      summary: Deletar cliente
+      tags: [Clients]
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '204':
+          description: Cliente deletado com sucesso
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Id do cliente
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+      description: Número da página
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 10
+      description: Quantidade de registros por página
+  schemas:
+    ClientInput:
+      type: object
+      required: [name, email, document]
+      properties:
+        name:
+          type: string
+          example: João da Silva
+        email:
+          type: string
+          example: joao.silva@teste.com
+        document:
+          type: string
+          example: "98765432100"
+    ClientPartialInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: João da Silva Atualizado
+        email:
+          type: string
+          example: joao.atualizado@teste.com
+        document:
+          type: string
+          example: "98765432100"
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name:
+          type: string
+          example: João da Silva
+        email:
+          type: string
+          example: joao.silva@teste.com
+        document:
+          type: string
+          example: "98765432100"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Erro de validação de dados
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: document
+              message:
+                type: string
+                example: O documento deve conter apenas números (sem pontuação).
+  responses:
+    ClientResponse:
+      description: Cliente retornado com sucesso
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Client'
+    ClientListResponse:
+      description: Lista de clientes retornada com sucesso
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              clients:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+              totalPages:
+                type: integer
+                example: 3
+              currentPage:
+                type: integer
+                example: 1
+    ValidationError:
+      description: Erro de validação de dados
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+    NotFoundError:
+      description: Conteúdo não encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Conteúdo não encontrado
+    ConflictError:
+      description: Conflito de dados
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Conflito de dados
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Os dados informados já estão em uso.
